@@ -1,0 +1,29 @@
+# ORVIX Architecture
+
+Frontend
+
+↓
+
+API
+
+↓
+
+Backend
+
+↓
+
+AI Engine
+
+↓
+
+Database
+
+↓
+
+Memory
+
+↓
+
+Tools
+
+Version 1.0

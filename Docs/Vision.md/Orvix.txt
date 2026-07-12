@@ -1,0 +1,23 @@
+# ORVIX
+
+## Tagline
+Intelligence That Works.
+
+## Mission
+Build AI Employees that help businesses automate repetitive work, increase productivity, and save time.
+
+## Vision
+Create the world's leading AI Workforce Platform where every business can hire intelligent AI Employees.
+
+## Problem
+Businesses use too many disconnected tools.
+Chatbots answer questions but don't execute work.
+
+## Solution
+ORVIX provides AI Employees that collaborate and complete real business tasks.
+
+## Version 1
+- AI Chat
+- Business Workspace
+- Knowledge Base
+- One AI Employee

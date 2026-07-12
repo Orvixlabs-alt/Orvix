@@ -1,0 +1,22 @@
+# ORVIX Company Principles
+
+## 1. Users First
+Every feature must solve a real problem.
+
+## 2. Build Small
+Launch simple. Improve continuously.
+
+## 3. Quality > Quantity
+One excellent feature is better than ten average ones.
+
+## 4. Engineering First
+Clean, scalable and maintainable code.
+
+## 5. Long-Term Thinking
+Build for years, not weeks.
+
+## 6. Learn Every Day
+Always improve.
+
+## 7. Stay Humble
+Let the product speak louder than marketing.

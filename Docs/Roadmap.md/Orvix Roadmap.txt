@@ -1,0 +1,18 @@
+# ORVIX Roadmap
+
+Phase 1
+- Foundation ✅
+
+Phase 2
+- GitHub
+- Website
+- Dashboard
+
+Phase 3
+- AI Employee MVP
+
+Phase 4
+- First Users
+
+Phase 5
+- Public Launch
