@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from app.core.ai_provider import client
-from app.core.memory import add_message, get_messages
+from app.core.database import save_message, get_chat_history
 
 router = APIRouter()
 
@@ -29,18 +29,16 @@ Rules:
 @router.post("/chat", tags=["ORA"])
 def chat(request: ChatRequest):
     try:
-        # Save user message
-        add_message("user", request.message)
+        # Save user message to database
+        save_message("user", request.message)
 
-        # Build conversation
         messages = [
             {
                 "role": "system",
                 "content": SYSTEM_PROMPT
             }
-        ] + get_messages()
+        ] + get_chat_history()
 
-        # Call ORA (Groq)
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=messages
@@ -48,8 +46,8 @@ def chat(request: ChatRequest):
 
         ai_reply = response.choices[0].message.content
 
-        # Save assistant response
-        add_message("assistant", ai_reply)
+        # Save ORA reply to database
+        save_message("assistant", ai_reply)
 
         return {
             "user": request.message,
