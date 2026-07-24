@@ -16,6 +16,7 @@ def init_db():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS chats (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id TEXT NOT NULL,
             role TEXT NOT NULL,
             message TEXT NOT NULL
         )
@@ -25,20 +26,23 @@ def init_db():
     conn.close()
 
 
-def save_message(role: str, message: str):
+def save_message(user_id: str, role: str, message: str):
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute(
-        "INSERT INTO chats (role, message) VALUES (?, ?)",
-        (role, message)
+        """
+        INSERT INTO chats (user_id, role, message)
+        VALUES (?, ?, ?)
+        """,
+        (user_id, role, message)
     )
 
     conn.commit()
     conn.close()
 
 
-def get_chat_history(limit=20):
+def get_chat_history(user_id: str, limit=20):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -46,10 +50,11 @@ def get_chat_history(limit=20):
         """
         SELECT role, message
         FROM chats
+        WHERE user_id = ?
         ORDER BY id DESC
         LIMIT ?
         """,
-        (limit,)
+        (user_id, limit)
     )
 
     rows = cursor.fetchall()
@@ -66,11 +71,14 @@ def get_chat_history(limit=20):
     ]
 
 
-def clear_chat_history():
+def clear_chat_history(user_id: str):
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("DELETE FROM chats")
+    cursor.execute(
+        "DELETE FROM chats WHERE user_id = ?",
+        (user_id,)
+    )
 
     conn.commit()
     conn.close()

@@ -8,6 +8,7 @@ router = APIRouter()
 
 
 class ChatRequest(BaseModel):
+    user_id: str
     message: str
 
 
@@ -29,15 +30,19 @@ Rules:
 @router.post("/chat", tags=["ORA"])
 def chat(request: ChatRequest):
     try:
-        # Save user message to database
-        save_message("user", request.message)
+        # Save user message
+        save_message(
+            request.user_id,
+            "user",
+            request.message
+        )
 
         messages = [
             {
                 "role": "system",
                 "content": SYSTEM_PROMPT
             }
-        ] + get_chat_history()
+        ] + get_chat_history(request.user_id)
 
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
@@ -46,10 +51,15 @@ def chat(request: ChatRequest):
 
         ai_reply = response.choices[0].message.content
 
-        # Save ORA reply to database
-        save_message("assistant", ai_reply)
+        # Save assistant reply
+        save_message(
+            request.user_id,
+            "assistant",
+            ai_reply
+        )
 
         return {
+            "user_id": request.user_id,
             "user": request.message,
             "orvix": ai_reply
         }
