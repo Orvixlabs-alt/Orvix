@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import sqlite3
+import bcrypt
 
 router = APIRouter()
 
@@ -30,10 +31,16 @@ def register(request: RegisterRequest):
             detail="Username already exists"
         )
 
-    # Insert new user
+    # Hash password
+    hashed_password = bcrypt.hashpw(
+        request.password.encode("utf-8"),
+        bcrypt.gensalt()
+    ).decode("utf-8")
+
+    # Save user
     cursor.execute(
         "INSERT INTO users (username, password) VALUES (?, ?)",
-        (request.username, request.password)
+        (request.username, hashed_password)
     )
 
     conn.commit()
