@@ -13,12 +13,26 @@ def init_db():
     conn = get_connection()
     cursor = conn.cursor()
 
+    # ==========================
+    # Chats Table
+    # ==========================
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS chats (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id TEXT NOT NULL,
             role TEXT NOT NULL,
             message TEXT NOT NULL
+        )
+    """)
+
+    # ==========================
+    # Users Table
+    # ==========================
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
         )
     """)
 
