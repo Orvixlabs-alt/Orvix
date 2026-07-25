@@ -1,10 +1,14 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 
 from app.core.ai_provider import client
 from app.core.database import save_message, get_chat_history
+from app.core.jwt_handler import verify_access_token
 
 router = APIRouter()
+
+security = HTTPBearer()
 
 
 class ChatRequest(BaseModel):
@@ -28,9 +32,21 @@ Rules:
 
 
 @router.post("/chat", tags=["ORA"])
-def chat(request: ChatRequest):
+def chat(
+    request: ChatRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     try:
-        # Save user message
+        token = credentials.credentials
+
+        username = verify_access_token(token)
+
+        if username != request.user_id:
+            raise HTTPException(
+                status_code=403,
+                detail="Token does not match user"
+            )
+
         save_message(
             request.user_id,
             "user",
@@ -51,7 +67,6 @@ def chat(request: ChatRequest):
 
         ai_reply = response.choices[0].message.content
 
-        # Save assistant reply
         save_message(
             request.user_id,
             "assistant",
@@ -65,6 +80,9 @@ def chat(request: ChatRequest):
         }
 
     except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e
+
         raise HTTPException(
             status_code=500,
             detail=str(e)

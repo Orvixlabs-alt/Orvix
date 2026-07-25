@@ -3,6 +3,8 @@ from pydantic import BaseModel
 import sqlite3
 import bcrypt
 
+from app.core.jwt_handler import create_access_token
+
 router = APIRouter()
 
 
@@ -41,7 +43,11 @@ def login(request: LoginRequest):
             detail="Invalid username or password"
         )
 
+    token = create_access_token(user[0])
+
     return {
         "message": "Login successful",
-        "username": user[0]
+        "username": user[0],
+        "access_token": token,
+        "token_type": "bearer"
     }
