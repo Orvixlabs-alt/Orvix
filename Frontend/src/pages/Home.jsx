@@ -1,65 +1,82 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const navigate = useNavigate();
+
+  const username = localStorage.getItem("username");
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+
+    navigate("/login");
+  };
+
   return (
     <div
       style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        minHeight: "100vh",
         background: "#0f172a",
         color: "white",
+        padding: "40px",
       }}
     >
-      <h1 style={{ fontSize: "60px", marginBottom: "10px" }}>
-        ORVIX
-      </h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h1>🚀 ORVIX Dashboard</h1>
+
+        <button
+          onClick={logout}
+          style={{
+            background: "#ef4444",
+            color: "white",
+            border: "none",
+            padding: "10px 20px",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          Logout
+        </button>
+      </div>
+
+      <hr
+        style={{
+          margin: "25px 0",
+          borderColor: "#334155",
+        }}
+      />
+
+      <h2>Welcome, {username}! 👋</h2>
 
       <p
         style={{
           color: "#94a3b8",
-          marginBottom: "40px",
+          marginTop: "15px",
           fontSize: "18px",
         }}
       >
-        Your Intelligent AI Workspace
+        Authentication completed successfully.
       </p>
 
       <div
         style={{
-          display: "flex",
-          gap: "20px",
+          marginTop: "40px",
+          padding: "30px",
+          background: "#1e293b",
+          borderRadius: "12px",
         }}
       >
-        <Link to="/login">
-          <button
-            style={{
-              padding: "12px 28px",
-              borderRadius: "10px",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
-          >
-            Login
-          </button>
-        </Link>
+        <h3>🤖 ORVIX AI</h3>
 
-        <Link to="/register">
-          <button
-            style={{
-              padding: "12px 28px",
-              borderRadius: "10px",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
-          >
-            Register
-          </button>
-        </Link>
+        <p style={{ color: "#94a3b8" }}>
+          Chat interface coming in the next step...
+        </p>
       </div>
     </div>
   );
